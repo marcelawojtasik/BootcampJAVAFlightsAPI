@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
+//@NoArgsConstructor
 //@AllArgsConstructor
 @Setter
 @Getter
@@ -45,6 +45,9 @@ public class Flight {
         this.frequency = frequency;
     }
 
+    public Flight() {
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -55,6 +58,10 @@ public class Flight {
 
     public void setDestiny(String destiny) {
         this.destiny = destiny;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Long getId() {
