@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @RestController
 @RequestMapping("/flights")
 public class FlightController {
@@ -17,7 +15,7 @@ public class FlightController {
     @Autowired //inyecto el serv
     private FlightsServices flightsServices; //instancia de servicio
 
-
+    //RUTAS PARA CRUD
     @PostMapping("/createSeveral")
     public void addFlights(@RequestBody List<Flight> flights){
         flightsServices.createSeveralFlights(flights);
@@ -51,6 +49,37 @@ public class FlightController {
     @DeleteMapping("/delete/all")
     public void deleteAllFlights(){
         flightsServices.deleteAllFlights();
+    }
+
+    //ENDPOINTS FUNC EXTRA
+    @GetMapping("/origin")
+    public List<Flight> getByOrigin(@RequestParam String origin){
+        return flightsServices.getFlightsByOrigin(origin);
+    }
+
+    @GetMapping("/destiny")
+    public List<Flight> getByDestiny(@RequestParam String destiny){
+        return flightsServices.getFlightsByDestiny(destiny);
+    }
+
+    @GetMapping("/origin-destiny")
+    public List<Flight> getByOriginAndDestiny(@RequestParam String origin, String destiny){
+        return flightsServices.getFlightsByOriginAndDestiny(origin, destiny);
+    }
+
+    @GetMapping("/offers")
+    public List<Flight> getByPrice(@RequestParam double offerPrice){
+        return flightsServices.getFlightsByPrice(offerPrice);
+    }
+
+    @GetMapping("/getOffers") //Misma funcion, usa stream
+    public List<Flight> getOffers(@RequestParam double offerPrice){
+        return flightsServices.getOffers(offerPrice);
+    }
+
+    @GetMapping("/origin-offers")
+    public List<Flight> getByOriginAndPrice(String origin, Integer offerPrice){
+        return flightsServices.getFlightsByOriginAndPrice(origin, offerPrice);
     }
 
 

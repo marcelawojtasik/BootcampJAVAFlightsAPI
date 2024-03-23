@@ -60,4 +60,12 @@ public class Flight {
     public Long getId() {
         return id;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
 }
