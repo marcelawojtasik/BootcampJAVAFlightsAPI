@@ -75,4 +75,8 @@ public class Flight {
     public String getOrigin() {
         return origin;
     }
+
+    public String getDestiny() {
+        return destiny;
+    }
 }

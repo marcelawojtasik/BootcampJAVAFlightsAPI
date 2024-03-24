@@ -50,6 +50,14 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<version>8.3.0</version>
 		</dependency>
+		<!-- Agrego h2 p/BBDD en memoria -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.2.224</version>
+			<scope>test</scope>
+		</dependency>
+
 
 
 	</dependencies>
