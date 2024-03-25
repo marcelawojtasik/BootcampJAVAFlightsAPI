@@ -1,6 +1,7 @@
 package BootcampJAVA.FlightsAPI.controller;
 
 
+import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.services.FlightsServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,15 @@ public class FlightController {
     @GetMapping("/origin-offers")
     public List<Flight> getByOriginAndPrice(String origin, Integer offerPrice){
         return flightsServices.getFlightsByOriginAndPrice(origin, offerPrice);
+    }
+
+//    @GetMapping("/dolarPrice")
+//    public Dolar getDolar(){
+//        return flightsServices.getDolar();
+//    }
+    @GetMapping("/precio-dolar")
+    public double getDolar(){
+        return flightsServices.getDolar();
     }
 
 

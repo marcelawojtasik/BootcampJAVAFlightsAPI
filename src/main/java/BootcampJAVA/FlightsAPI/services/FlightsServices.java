@@ -1,5 +1,7 @@
 package BootcampJAVA.FlightsAPI.services;
 
+import BootcampJAVA.FlightsAPI.configuration.FlightConfiguration;
+import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.repository.FlightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ public class FlightsServices {
 
         @Autowired
         private FlightsRepository flightsRepository;
+        @Autowired
+        FlightConfiguration flightConfiguration;
 
        // private List<Flight> flightsList = new ArrayList<>();
         //CRUD
@@ -84,6 +88,14 @@ public class FlightsServices {
             return detectOffers(flights, offerPrice);
         }
 
+//        public Dolar getDolar() {
+//            return flightConfiguration.fetchDolar();
+//        }
+
+        public double getDolar() {
+            return flightConfiguration.fetchDolar().getPromedio();
+        }
+
 
 //NO FUNCIONA, ME TRAE ARRAY VACIO
     public List<Flight> getFlightsByOriginAndPrice(String origin, Integer offerPrice) {
@@ -98,5 +110,7 @@ public class FlightsServices {
         //return flightsByOriginAndPrice;
         return flightsRepository.findByOriginAndPrice(origin, offerPrice);
     }
+
+
 }
 
