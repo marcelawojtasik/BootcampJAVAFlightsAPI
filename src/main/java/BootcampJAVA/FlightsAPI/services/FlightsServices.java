@@ -3,7 +3,9 @@ package BootcampJAVA.FlightsAPI.services;
 import BootcampJAVA.FlightsAPI.configuration.FlightConfiguration;
 import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
+import BootcampJAVA.FlightsAPI.model.FlightDTO;
 import BootcampJAVA.FlightsAPI.repository.FlightsRepository;
+import BootcampJAVA.FlightsAPI.utils.FlightUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class FlightsServices {
         private FlightsRepository flightsRepository;
         @Autowired
         FlightConfiguration flightConfiguration;
+        @Autowired
+        FlightUtils flightUtils;
 
        // private List<Flight> flightsList = new ArrayList<>();
         //CRUD
@@ -31,8 +35,20 @@ public class FlightsServices {
             flightsRepository.save(flight);
         }
 
-        public List<Flight> getAllFlights() {
-            return flightsRepository.findAll();
+//        public List<Flight> getAllFlights() { return flightsRepository.findAll(); }
+
+//        public List<FlightDTO>  getAllDTOs(){
+//            List<Flight> flightList = flightsRepository.findAll();
+//            return flightList.stream()
+//                    .map(flight -> flightUtils.flightMapper(flight, getDolar()))
+//                    .collect(Collectors.toList());
+//        }
+
+        //Agregado para mapear toda la lista de vuelos
+        public List<FlightDTO> findAll(){
+            double dolarPrice = getDolar();
+            //List<Flight> flights = flightsRepository.findAll();
+            return flightUtils.DTOsMapper(flightsRepository.findAll(), dolarPrice); //cambie el mapper, VER
         }
 
         public Flight getFlightById(Long id) {
@@ -88,11 +104,8 @@ public class FlightsServices {
             return detectOffers(flights, offerPrice);
         }
 
-//        public Dolar getDolar() {
-//            return flightConfiguration.fetchDolar();
-//        }
 
-        public double getDolar() {
+        private double getDolar() { //lo necesito solo para realizar mas adelante la conversion
             return flightConfiguration.fetchDolar().getPromedio();
         }
 
@@ -112,5 +125,8 @@ public class FlightsServices {
     }
 
 
+    public List<Dolar> getAllDollars() {
+            return List.of(flightConfiguration.fetchAllDolars()); //List.of transforma Array en Lista
+    } //va a traer tambien el promedio, x metodo creado en clase Dolar
 }
 

@@ -3,6 +3,7 @@ package BootcampJAVA.FlightsAPI.controller;
 
 import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
+import BootcampJAVA.FlightsAPI.model.FlightDTO;
 import BootcampJAVA.FlightsAPI.services.FlightsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,14 @@ public class FlightController {
         flightsServices.createFlight(flight);
     }
 
+//    @GetMapping("/all")
+//    public List<Flight> getAllFlights(){
+//        return flightsServices.getAllFlights();
+//    }
     @GetMapping("/all")
-    public List<Flight> getAllFlights(){
-        return flightsServices.getAllFlights();
+    public List<FlightDTO> getAllFlights(){
+        //return flightsServices.getAllDTOs();
+        return flightsServices.findAll();
     }
 
     @GetMapping("/id{id}")
@@ -83,14 +89,15 @@ public class FlightController {
         return flightsServices.getFlightsByOriginAndPrice(origin, offerPrice);
     }
 
+    @GetMapping("/allDollars")
+    public List<Dolar> getAllDolars(){
+        return flightsServices.getAllDollars();
+    }
+
 //    @GetMapping("/dolarPrice")
-//    public Dolar getDolar(){
+//    public double getDolar(){
 //        return flightsServices.getDolar();
 //    }
-    @GetMapping("/precio-dolar")
-    public double getDolar(){
-        return flightsServices.getDolar();
-    }
 
 
 

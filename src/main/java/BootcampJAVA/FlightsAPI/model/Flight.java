@@ -48,6 +48,18 @@ public class Flight {
     public Flight() {
     }
 
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -80,4 +92,15 @@ public class Flight {
         return destiny;
     }
 
-   }
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+}
