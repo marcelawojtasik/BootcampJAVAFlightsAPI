@@ -7,7 +7,6 @@ import BootcampJAVA.FlightsAPI.model.FlightDTO;
 import BootcampJAVA.FlightsAPI.repository.FlightsRepository;
 import BootcampJAVA.FlightsAPI.utils.FlightUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ public class FlightsServices {
         FlightUtils flightUtils;
 
        // private List<Flight> flightsList = new ArrayList<>();
-        //CRUD
 
+        //CRUD
         public void createSeveralFlights(List<Flight> flights){
             flightsRepository.saveAll(flights);
         }
@@ -44,8 +43,7 @@ public class FlightsServices {
 //                    .collect(Collectors.toList());
 //        }
 
-        //Agregado para mapear toda la lista de vuelos
-        public List<FlightDTO> findAll(){
+        public List<FlightDTO> findAll(){ //Mapeo lista de vuelos
             double dolarPrice = getDolar();
             //List<Flight> flights = flightsRepository.findAll();
             return flightUtils.DTOsMapper(flightsRepository.findAll(), dolarPrice); //cambie el mapper, VER
@@ -81,6 +79,7 @@ public class FlightsServices {
             return flightsRepository.findByOriginAndDestiny(origin, destiny);
         }
 
+        //DECLARATIVA "/offers"
         public List<Flight> getFlightsByPrice(double offerPrice){
             List<Flight> allFlights = flightsRepository.findAll();
             List<Flight> flightsByPrice = new ArrayList<>();
@@ -93,7 +92,7 @@ public class FlightsServices {
             return flightsByPrice;
         }
 
-        //CON STREAM
+        //CON STREAM "/getOffers"
         public List<Flight> detectOffers(List<Flight> flights, double offerPrice){
             return flights.stream()
                     .filter(flight -> flight.getPrice() < offerPrice)
@@ -104,29 +103,24 @@ public class FlightsServices {
             return detectOffers(flights, offerPrice);
         }
 
-
         private double getDolar() { //lo necesito solo para realizar mas adelante la conversion
-            return flightConfiguration.fetchDolar().getPromedio();
+            return flightUtils.fetchDolar().getPromedio();
         }
 
+        public List<Flight> getFlightsByOriginAndPrice(String origin, Integer offerPrice) {
+            List<Flight> allFlights = flightsRepository.findAll();
+            List<Flight> flightsByOriginAndPrice = new ArrayList<>();
 
-//NO FUNCIONA, ME TRAE ARRAY VACIO
-    public List<Flight> getFlightsByOriginAndPrice(String origin, Integer offerPrice) {
-        List<Flight> allFlights = flightsRepository.findAll();
-        List<Flight> flightsByOriginAndPrice = new ArrayList<>();
-
-        for(Flight flight: allFlights){
-            if( (flight.getOrigin()==origin) && (flight.getPrice() < offerPrice) ){
-                flightsByOriginAndPrice.add(flight);
+            for(Flight flight: allFlights){
+                if( (flight.getOrigin().equals(origin)) && (flight.getPrice() < offerPrice) ){ //ver, antes comp con == equals
+                    flightsByOriginAndPrice.add(flight);
+                }
             }
+            return flightsByOriginAndPrice;
         }
-        //return flightsByOriginAndPrice;
-        return flightsRepository.findByOriginAndPrice(origin, offerPrice);
-    }
 
-
-    public List<Dolar> getAllDollars() {
-            return List.of(flightConfiguration.fetchAllDolars()); //List.of transforma Array en Lista
-    } //va a traer tambien el promedio, x metodo creado en clase Dolar
+        public List<Dolar> getAllDollars() {
+                return List.of(flightUtils.fetchAllDolars()); //List.of transforma Array en Lista
+        } //va a traer tambien el promedio, x metodo creado en clase Dolar
 }
 

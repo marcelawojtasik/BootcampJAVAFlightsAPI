@@ -1,10 +1,12 @@
 package BootcampJAVA.FlightsAPI.model;
 
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 @Getter
 @Data
 public class Dolar {
@@ -15,25 +17,8 @@ public class Dolar {
     private double venta;
     LocalDateTime fechaActualizacion;
 
-    public Dolar(String moneda, String casa, String nombre, double compra, double venta, LocalDateTime fechaActualizacion) {
-        this.moneda = moneda;
-        this.casa = casa;
-        this.nombre = nombre;
-        this.compra = compra;
-        this.venta = venta;
-        this.fechaActualizacion = fechaActualizacion;
-    }
-
     public double getPromedio(){
         return((getCompra()+getVenta())/2);
-    }
-
-    public double getCompra() {
-        return compra;
-    }
-
-    public double getVenta() {
-        return venta;
     }
 
 }

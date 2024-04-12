@@ -1,12 +1,12 @@
 package BootcampJAVA.FlightsAPI.controller;
 
 import BootcampJAVA.FlightsAPI.model.Company;
-import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.services.CompanyServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/companies")
@@ -15,16 +15,20 @@ public class CompanyController {
     @Autowired
     CompanyServices companyServices;
 
+    @CrossOrigin
     @PostMapping("/create")
     public void createCompany (@RequestBody Company company){
         companyServices.createCompany(company);
+    }
+    @PostMapping("/createAll")
+    public void createAllCompanies (@RequestBody List<Company> companies){
+        companyServices.createCompanies(companies);
     }
 
     @GetMapping("/all")
     public List<Company> allCompanies(){
         return companyServices.getAllCompanies();
     }
-
     @GetMapping("/name")
     public List<Company> companiesByName(@RequestParam String name){
         return companyServices.getCompanyByName(name);

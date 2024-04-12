@@ -14,8 +14,11 @@ public class CompanyServices {
     CompanyRepository companyRepository;
 
     //CREATE
-    public Company createCompany(Company company){
-        return companyRepository.save(company);
+    public void createCompany(Company company){
+        companyRepository.save(company);
+    }
+    public void createCompanies(List<Company> companies){
+        companyRepository.saveAll(companies);
     }
 
     //READ
@@ -40,6 +43,8 @@ public class CompanyServices {
         companyRepository.deleteById(id);
     }
 
-
+    public void deleteAllCompanies(){
+        companyRepository.deleteAll();
+    }
 
 }

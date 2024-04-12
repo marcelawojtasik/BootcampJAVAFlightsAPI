@@ -9,20 +9,21 @@ import org.springframework.web.client.RestTemplate;
 public class FlightConfiguration {
     //config Rest Template
     @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate(); //genero nuevo componente
+    public RestTemplate restTemplate1(){
+        return new RestTemplate(); //genero nuevo componente de conexión con API externa
     }
 
-    //quiero traer el objeto Dolar
-    public Dolar fetchDolar(){
-        RestTemplate restTemplate = restTemplate(); //instancio objeto Rest Template
-        String apiUrl = "https://dolarapi.com/v1/dolares/tarjeta";
-        return restTemplate.getForObject(apiUrl, Dolar.class);
-    } //puedo pasar param dolarType y concatenar a url para obtener los distintos tipos de dolar
+    //quiero traer el objeto Dolar - LO PASE A UTILS
+//    public Dolar fetchDolar(){
+//        RestTemplate restTemplate = restTemplate1(); //instancio objeto Rest Template
+//        String apiUrl = "https://dolarapi.com/v1/dolares/tarjeta";
+//        return restTemplate.getForObject(apiUrl, Dolar.class);
+//    }
+    //puedo pasar param dolarType y concatenar a url para obtener los distintos tipos de dolar
 
-    public Dolar[] fetchAllDolars() { //traigo array por eso lo indico []
-        RestTemplate restTemplate = restTemplate();
+    public Dolar[] fetchAllDolars() { //traigo array []
+        RestTemplate restTemplate = restTemplate1();
         String apiUrl = "https://dolarapi.com/v1/dolares";
-        return restTemplate.getForEntity(apiUrl, Dolar[].class).getBody(); //del Entity solo quiero el array con los datos, que esta en el body de la respuesta
+        return restTemplate.getForEntity(apiUrl, Dolar[].class).getBody(); //del Entity solo quiero el array con los datos, que esta en el body de la response
     }
 }

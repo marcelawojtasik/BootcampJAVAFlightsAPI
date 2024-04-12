@@ -1,8 +1,8 @@
 package BootcampJAVA.FlightsAPI.utils;
 
+import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.model.FlightDTO;
-import BootcampJAVA.FlightsAPI.services.FlightsServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
 class FlightUtilsTest {
 
     @Autowired
-    FlightUtils flightUtils;
+    FlightUtils flightUtils; //Inyecto dependencia
 
     @BeforeEach
     public void setUp(){
         List<Flight> flightList;
         List<FlightDTO> flightDTOList;
-        double dolarPrice = 1100; //puedo hardcodear xq no interesa valor real si no que funcione
+        double dolarPrice = 1100;
     }
 
     @Test
@@ -34,7 +36,7 @@ class FlightUtilsTest {
         List<FlightDTO> flightDTOList = new ArrayList<>(); //inicializo lista DTOs
 
         Flight flight = new Flight(); //Creo vuelo
-        //Flight.setId(1L);
+        flight.setId(1L);
         flight.setOrigin("COR");
         flight.setDestiny("EZE");
         flight.setDepartureTime("Salida");
@@ -45,10 +47,35 @@ class FlightUtilsTest {
         flightList.add(flight); //agrego el vuelo a la lista
 
 
-        flightDTOList = flightUtils.DTOsMapper(flightList, dolarPrice);
+        flightDTOList = flightUtils.DTOsMapper(flightList, dolarPrice); //Llamo al metodo a probar
 
         FlightDTO flightDTO = flightDTOList.get(0);
-        //assertEquals(1, flightDTO.getId());
+        assertEquals(1, flightDTO.getId());
         assertEquals(flight.getPrice() * dolarPrice, flightDTO.getConvertedPrice());
     }
+
+    @Test
+    void fetchDolarTest(){
+        //genero contexto
+        FlightUtils mockedFlightUtils = mock(FlightUtils.class);
+        Dolar dummyDolar = new Dolar();
+
+        dummyDolar.setMoneda("USD");
+        dummyDolar.setCasa("tarjeta");
+        dummyDolar.setNombre("Tarjeta");
+        dummyDolar.setVenta(1000.00);
+        dummyDolar.setCompra(1200.00);
+
+        //genero Mock
+        when(mockedFlightUtils.fetchDolar()).thenReturn(dummyDolar);
+
+        //Llamo a la funcionalidad
+        Dolar dolar = mockedFlightUtils.fetchDolar(); //Si tengo otro dolar, comparo entre si
+
+        //Verificaciones
+//        assertEquals(dummyDolar.getPromedio(), dolar.getPromedio());
+        assertEquals(1100, dolar.getPromedio());
+    }
+
 }
+

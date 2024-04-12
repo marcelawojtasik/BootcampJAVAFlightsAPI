@@ -79,7 +79,7 @@ public class FlightController {
         return flightsServices.getFlightsByPrice(offerPrice);
     }
 
-    @GetMapping("/getOffers") //Misma funcion, usa stream
+    @GetMapping("/getOffers") //Misma función q endpoint "offers", usa stream
     public List<Flight> getOffers(@RequestParam double offerPrice){
         return flightsServices.getOffers(offerPrice);
     }

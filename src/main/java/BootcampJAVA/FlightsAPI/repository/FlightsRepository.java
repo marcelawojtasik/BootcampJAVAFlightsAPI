@@ -12,7 +12,6 @@ public interface FlightsRepository extends JpaRepository<Flight, Long> {
     List<Flight> findByOrigin(String origin);
     List<Flight> findByDestiny(String destiny);
     List<Flight> findByOriginAndDestiny(String origin, String destiny);
-    List<Flight> findByOriginAndPrice(String origin, Integer offerPrice);
 }
 
 //Una vez que agrego la interfaz, puedo usar los metodos q extiende JPA Repo (para el CRUD)
