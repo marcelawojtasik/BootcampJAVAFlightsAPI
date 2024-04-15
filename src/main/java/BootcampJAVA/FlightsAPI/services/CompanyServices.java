@@ -1,8 +1,10 @@
 package BootcampJAVA.FlightsAPI.services;
 
+import BootcampJAVA.FlightsAPI.exceptions.ResourceNotFoundException;
 import BootcampJAVA.FlightsAPI.model.Company;
 import BootcampJAVA.FlightsAPI.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +41,8 @@ public class CompanyServices {
     }
 
     //DELETE
-    public void deleteCompanyById(Long id){
+    public void deleteCompanyById(Long id) throws ResourceNotFoundException{
+        Company company = companyRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Company", "id", id));
         companyRepository.deleteById(id);
     }
 

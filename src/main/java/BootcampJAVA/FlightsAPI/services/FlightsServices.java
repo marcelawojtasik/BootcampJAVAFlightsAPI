@@ -1,9 +1,12 @@
 package BootcampJAVA.FlightsAPI.services;
 
 import BootcampJAVA.FlightsAPI.configuration.FlightConfiguration;
+import BootcampJAVA.FlightsAPI.exceptions.ResourceNotFoundException;
+import BootcampJAVA.FlightsAPI.model.Company;
 import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.model.FlightDTO;
+import BootcampJAVA.FlightsAPI.repository.CompanyRepository;
 import BootcampJAVA.FlightsAPI.repository.FlightsRepository;
 import BootcampJAVA.FlightsAPI.utils.FlightUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class FlightsServices {
         FlightConfiguration flightConfiguration;
         @Autowired
         FlightUtils flightUtils;
+        @Autowired
+        CompanyRepository companyRepository;
 
        // private List<Flight> flightsList = new ArrayList<>();
 
@@ -29,9 +34,24 @@ public class FlightsServices {
         public void createSeveralFlights(List<Flight> flights){
             flightsRepository.saveAll(flights);
         }
-
         public void createFlight(Flight flight){
             flightsRepository.save(flight);
+        }
+        
+        
+        public Flight createFlightWithCompany(Flight flight, Long companyId){
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(()-> new ResourceNotFoundException("flight", "id", companyId));
+            flight.setCompany(company);
+            return flightsRepository.save(flight);
+        }
+        public void createSeveralFlightsWithCompany(List<Flight> flights, Long companyId){
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(()-> new IllegalArgumentException("Company not found"));
+            for (Flight flight : flights) {
+                flight.setCompany(company);
+            }
+            flightsRepository.saveAll(flights);
         }
 
 //        public List<Flight> getAllFlights() { return flightsRepository.findAll(); }
@@ -58,13 +78,15 @@ public class FlightsServices {
             return flightsRepository.findById(flight.getId()).orElse(null);
         }
 
-        public void deleteFlightById(Long id) {
+        public void deleteFlightById(Long id) throws ResourceNotFoundException {
+            Flight flight = flightsRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Flight", "id", id));
             flightsRepository.deleteById(id);
         }
 
          public void deleteAllFlights() {
             flightsRepository.deleteAll();
         }
+
 
         //FUNCIONALIDADES EXTRA
         public List<Flight> getFlightsByOrigin(String origin){
@@ -103,7 +125,7 @@ public class FlightsServices {
             return detectOffers(flights, offerPrice);
         }
 
-        private double getDolar() { //lo necesito solo para realizar mas adelante la conversion
+        private double getDolar() { //para realizar conversion
             return flightUtils.fetchDolar().getPromedio();
         }
 

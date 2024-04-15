@@ -1,5 +1,6 @@
 package BootcampJAVA.FlightsAPI.controller;
 
+import BootcampJAVA.FlightsAPI.exceptions.ResourceNotFoundException;
 import BootcampJAVA.FlightsAPI.model.Company;
 import BootcampJAVA.FlightsAPI.services.CompanyServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class CompanyController {
 
     @Autowired
     CompanyServices companyServices;
+
 
     @CrossOrigin
     @PostMapping("/create")
@@ -43,9 +45,17 @@ public class CompanyController {
         companyServices.updateCompany(company);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteCompanyById(@PathVariable Long id){
-        companyServices.deleteCompanyById(id);
+    @DeleteMapping("/delete{id}")
+    public String deleteCompanyById(@PathVariable Long id){
+        try{
+            companyServices.deleteCompanyById(id);
+            return "Compañía borrada exitosamente";
+        } catch (ResourceNotFoundException e){
+            System.out.println(e.getMessage());
+            return "No se encontró la compañía solicitada";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "No se completó el proceso";}
     }
 
 }

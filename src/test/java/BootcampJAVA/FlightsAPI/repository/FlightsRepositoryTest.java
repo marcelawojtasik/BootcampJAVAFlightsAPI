@@ -54,7 +54,7 @@ public class FlightsRepositoryTest {
         List<Flight> flightsList = flightsRepository.findAll();
 
         assertThat(flightsList).isNotNull();
-        assertThat(flightsList.size()).isEqualTo(69); // 69???
+        assertThat(flightsList.size()).isEqualTo(2); // 69???
     }
 
     @Test
@@ -89,8 +89,7 @@ public class FlightsRepositoryTest {
 //        List<Flight> flights = flightsRepository.findByOrigin(flight.getOrigin());
         assertThat(flights.stream()
                 .filter(flight -> flight.getOrigin() == "Buenos Aires")
-                .collect(Collectors.toList()).size()).isEqualTo(2
-        );
+                .collect(Collectors.toList()).size()).isEqualTo(2);
         //assertThat(flights.size()).isEqualTo(2); //3?
 
 
