@@ -37,7 +37,7 @@ public class CompanyServices {
     //UPDATE
     public Company updateCompany(Company company){
         companyRepository.save(company);
-        return companyRepository.findById(company.getId()).orElse(null);
+        return companyRepository.findById(company.getId()).orElseThrow(()-> new ResourceNotFoundException("Error en datos ingresados"));
     }
 
     //DELETE

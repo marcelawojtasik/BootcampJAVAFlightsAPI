@@ -1,8 +1,6 @@
 package BootcampJAVA.FlightsAPI.controller;
 
-
 import BootcampJAVA.FlightsAPI.exceptions.ResourceNotFoundException;
-import BootcampJAVA.FlightsAPI.model.Company;
 import BootcampJAVA.FlightsAPI.model.Dolar;
 import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.model.FlightDTO;
@@ -16,7 +14,7 @@ import java.util.List;
 @RequestMapping("/flights")
 public class FlightController {
 
-    @Autowired //inyecto el serv
+    @Autowired
     private FlightsServices flightsServices; //instancia de servicio
 
     //RUTAS PARA CRUD
@@ -53,9 +51,22 @@ public class FlightController {
     }
 
     @GetMapping("/id{id}")
-    public Flight findFlightById(@PathVariable Long id){
-        return flightsServices.getFlightById(id);
+    public FlightDTO findFlightById(@PathVariable Long id){
+        return flightsServices.getFlightDTOById(id);
     }
+
+//    @GetMapping("/id{id}")
+//    public Flight findFlightById(@PathVariable Long id){
+//        return flightsServices.getFlightById(id);
+//    }
+    //    public String findFlightById(@PathVariable Long id){
+//        try{
+//            Flight flight = flightsServices.getFlightById(id);
+//            return ("El vuelo es " +flight);
+//        } catch(ResourceNotFoundException e){
+//            System.out.println(e.getMessage());
+//            return "No se encontró el vuelo con el id solicitado";
+//        }
 
     @PutMapping("/update")
     public void updateFlight(@RequestBody Flight flight){
@@ -73,34 +84,35 @@ public class FlightController {
         }
     }
 
-
     @DeleteMapping("/delete/all")
     public void deleteAllFlights(){
         flightsServices.deleteAllFlights();
     }
 
-    //ENDPOINTS FUNC EXTRA
+
+    //                  ENDPOINTS FUNCIONALIDADES EXTRA
+
     @GetMapping("/origin")
-    public List<Flight> getByOrigin(@RequestParam String origin){
+    public List<FlightDTO> getByOrigin(@RequestParam String origin){
         return flightsServices.getFlightsByOrigin(origin);
     }
 
     @GetMapping("/destiny")
-    public List<Flight> getByDestiny(@RequestParam String destiny){
+    public List<FlightDTO> getByDestiny(@RequestParam String destiny){
         return flightsServices.getFlightsByDestiny(destiny);
     }
 
     @GetMapping("/origin-destiny")
-    public List<Flight> getByOriginAndDestiny(@RequestParam String origin, String destiny){
+    public List<FlightDTO> getByOriginAndDestiny(@RequestParam String origin, String destiny){
         return flightsServices.getFlightsByOriginAndDestiny(origin, destiny);
     }
 
     @GetMapping("/offers")
-    public List<Flight> getByPrice(@RequestParam double offerPrice){
+    public List<FlightDTO> getByPrice(@RequestParam double offerPrice){
         return flightsServices.getFlightsByPrice(offerPrice);
     }
 
-    @GetMapping("/getOffers") //Misma función q endpoint "offers", usa stream
+    @GetMapping("/getOffers") //Misma función q endpoint "offers", con stream
     public List<Flight> getOffers(@RequestParam double offerPrice){
         return flightsServices.getOffers(offerPrice);
     }
@@ -110,11 +122,15 @@ public class FlightController {
         return flightsServices.getFlightsByOriginAndPrice(origin, offerPrice);
     }
 
+    @GetMapping("/origin-offers-DTOs")
+    public List<FlightDTO> getDTOsByOriginAndPrice(@RequestParam String origin, Integer offerPrice){
+        return flightsServices.getFlightsDTOByOAP(origin, offerPrice);
+    }
+
     @GetMapping("/allDollars")
     public List<Dolar> getAllDolars(){
         return flightsServices.getAllDollars();
     }
-
 
 }
 

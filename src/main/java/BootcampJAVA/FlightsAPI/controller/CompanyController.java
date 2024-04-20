@@ -41,8 +41,17 @@ public class CompanyController {
     }
 
     @PutMapping("/update")
-    public void updateCompany(@RequestBody Company company){
-        companyServices.updateCompany(company);
+//    public void updateCompany(@RequestBody Company company){
+//        companyServices.updateCompany(company);
+//    }
+    public String updateCompany(@RequestBody Company company){
+        try{
+            companyServices.updateCompany(company);
+            return "Compañía actualizada correctamente";
+        } catch (ResourceNotFoundException e) {
+            System.out.println(e.getMessage());
+            return "No existe la compañía solicitada";
+        }
     }
 
     @DeleteMapping("/delete{id}")

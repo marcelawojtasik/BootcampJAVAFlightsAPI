@@ -57,7 +57,8 @@ class FlightUtilsTest {
     @Test
     void fetchDolarTest(){
         //genero contexto
-        FlightUtils mockedFlightUtils = mock(FlightUtils.class);
+        //FlightUtils mockedFlightUtils = mock(DolarUtils.class);
+        DolarUtils mockedDolarUtils = mock(DolarUtils.class);
         Dolar dummyDolar = new Dolar();
 
         dummyDolar.setMoneda("USD");
@@ -67,10 +68,10 @@ class FlightUtilsTest {
         dummyDolar.setCompra(1200.00);
 
         //genero Mock
-        when(mockedFlightUtils.fetchDolar()).thenReturn(dummyDolar);
+        when(mockedDolarUtils.fetchDolar()).thenReturn(dummyDolar);
 
         //Llamo a la funcionalidad
-        Dolar dolar = mockedFlightUtils.fetchDolar(); //Si tengo otro dolar, comparo entre si
+        Dolar dolar = mockedDolarUtils.fetchDolar(); //Si tengo otro dolar, comparo entre si
 
         //Verificaciones
 //        assertEquals(dummyDolar.getPromedio(), dolar.getPromedio());

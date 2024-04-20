@@ -8,6 +8,7 @@ import BootcampJAVA.FlightsAPI.model.Flight;
 import BootcampJAVA.FlightsAPI.model.FlightDTO;
 import BootcampJAVA.FlightsAPI.repository.CompanyRepository;
 import BootcampJAVA.FlightsAPI.repository.FlightsRepository;
+import BootcampJAVA.FlightsAPI.utils.DolarUtils;
 import BootcampJAVA.FlightsAPI.utils.FlightUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,11 @@ public class FlightsServices {
         @Autowired
         FlightUtils flightUtils;
         @Autowired
+        DolarUtils dolarUtils;
+        @Autowired
         CompanyRepository companyRepository;
 
-       // private List<Flight> flightsList = new ArrayList<>();
+        // private List<Flight> flightsList = new ArrayList<>();
 
         //CRUD
         public void createSeveralFlights(List<Flight> flights){
@@ -37,14 +40,14 @@ public class FlightsServices {
         public void createFlight(Flight flight){
             flightsRepository.save(flight);
         }
-        
-        
+
         public Flight createFlightWithCompany(Flight flight, Long companyId){
             Company company = companyRepository.findById(companyId)
                     .orElseThrow(()-> new ResourceNotFoundException("flight", "id", companyId));
             flight.setCompany(company);
             return flightsRepository.save(flight);
         }
+
         public void createSeveralFlightsWithCompany(List<Flight> flights, Long companyId){
             Company company = companyRepository.findById(companyId)
                     .orElseThrow(()-> new IllegalArgumentException("Company not found"));
@@ -55,7 +58,6 @@ public class FlightsServices {
         }
 
 //        public List<Flight> getAllFlights() { return flightsRepository.findAll(); }
-
 //        public List<FlightDTO>  getAllDTOs(){
 //            List<Flight> flightList = flightsRepository.findAll();
 //            return flightList.stream()
@@ -65,12 +67,13 @@ public class FlightsServices {
 
         public List<FlightDTO> findAll(){ //Mapeo lista de vuelos
             double dolarPrice = getDolar();
-            //List<Flight> flights = flightsRepository.findAll();
-            return flightUtils.DTOsMapper(flightsRepository.findAll(), dolarPrice); //cambie el mapper, VER
+            return flightUtils.DTOsMapper(flightsRepository.findAll(), dolarPrice);
         }
 
-        public Flight getFlightById(Long id) {
-            return flightsRepository.findById(id).orElse(null);
+        public FlightDTO getFlightDTOById(Long id) {
+            double dolarPrice = getDolar();
+            Flight flight = flightsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No existe el vuelo identificado con el id "+id));
+            return flightUtils.flightMapper(flight,dolarPrice);
         }
 
         public Flight updateFlight(Flight flight){
@@ -89,29 +92,47 @@ public class FlightsServices {
 
 
         //FUNCIONALIDADES EXTRA
-        public List<Flight> getFlightsByOrigin(String origin){
-            return flightsRepository.findByOrigin(origin);
+//        public List<FlightDTO> getFlightsByOrigin(String origin) { //Ver como hacer que devuelva mensaje de no hay lista o lista, se puede?
+//            List<FlightDTO> byOrigin = new ArrayList<>();
+//            long quantity = byOrigin.size(); //SIEMPRE DA CERO
+//            System.out.println(quantity);
+//            double dolarPrice = getDolar();
+//            if (quantity>0){
+//                System.out.println("Lista de vuelos");
+//            } else {
+//                System.out.println("No hay vuelos de origen " + origin);
+//            }
+//            return flightUtils.DTOsMapper(flightsRepository.findByOrigin(origin), dolarPrice);
+//        }
+
+        public List<FlightDTO> getFlightsByOrigin(String origin) {
+            List<FlightDTO> byOrigin = new ArrayList<>();
+            double dolarPrice = getDolar();
+            return flightUtils.DTOsMapper(flightsRepository.findByOrigin(origin), dolarPrice);
         }
 
-        public List<Flight> getFlightsByDestiny(String destiny){
-            return flightsRepository.findByDestiny(destiny);
+        public List<FlightDTO> getFlightsByDestiny(String destiny){
+            double dolarPrice = getDolar();
+            return flightUtils.DTOsMapper((flightsRepository.findByDestiny(destiny)), dolarPrice);
         }
 
-        public List<Flight> getFlightsByOriginAndDestiny(String origin, String destiny){
-            return flightsRepository.findByOriginAndDestiny(origin, destiny);
+        public List<FlightDTO> getFlightsByOriginAndDestiny(String origin, String destiny){
+            double dolarPrice = getDolar();
+            return flightUtils.DTOsMapper(flightsRepository.findByOriginAndDestiny(origin, destiny), dolarPrice);
         }
 
         //DECLARATIVA "/offers"
-        public List<Flight> getFlightsByPrice(double offerPrice){
+        public List<FlightDTO> getFlightsByPrice(double offerPrice){
             List<Flight> allFlights = flightsRepository.findAll();
             List<Flight> flightsByPrice = new ArrayList<>();
+            double dolarPrice = getDolar();
 
             for(Flight flight: allFlights){
                 if(flight.getPrice() < offerPrice){
                     flightsByPrice.add(flight);
                 }
             }
-            return flightsByPrice;
+            return flightUtils.flightsListMapper(flightsByPrice, dolarPrice);
         }
 
         //CON STREAM "/getOffers"
@@ -125,8 +146,15 @@ public class FlightsServices {
             return detectOffers(flights, offerPrice);
         }
 
-        private double getDolar() { //para realizar conversion
-            return flightUtils.fetchDolar().getPromedio();
+        public List<Flight> detectFlightsByOriginAndPrice(List<Flight> flights, String origin, Integer offerPrice) {
+            return flights.stream()
+                    .filter((flight -> flight.getPrice() < offerPrice & flight.getOrigin().equals(origin)))
+                    .collect(Collectors.toList());
+        }
+        public List<FlightDTO> getFlightsDTOByOAP(String origin, Integer offerPrice){
+            List<Flight> flights = flightsRepository.findAll();
+            double dolarPrice = getDolar();
+            return flightUtils.DTOsMapper(detectFlightsByOriginAndPrice(flights, origin, offerPrice), dolarPrice);
         }
 
         public List<Flight> getFlightsByOriginAndPrice(String origin, Integer offerPrice) {
@@ -141,8 +169,11 @@ public class FlightsServices {
             return flightsByOriginAndPrice;
         }
 
+        private double getDolar() {
+            return dolarUtils.fetchDolar().getPromedio();
+        }
         public List<Dolar> getAllDollars() {
-                return List.of(flightUtils.fetchAllDolars()); //List.of transforma Array en Lista
-        } //va a traer tambien el promedio, x metodo creado en clase Dolar
+                return List.of(dolarUtils.fetchAllDolars()); //List.of transforma Array en Lista
+        } //trae promedio, x metodo en clase Dolar
 }
 

@@ -11,8 +11,9 @@ public class FlightDTO {
     private String arrivalTime;
     private double convertedPrice;
     private String frequency;
+    private Company company;
 
-    public FlightDTO(Long id, String origin, String destiny, String departureTime, String arrivalTime, double convertedPrice, String frequency) {
+    public FlightDTO(Long id, String origin, String destiny, String departureTime, String arrivalTime, double convertedPrice, String frequency, Company company) {
         this.id = id;
         this.origin = origin;
         this.destiny = destiny;
@@ -20,6 +21,7 @@ public class FlightDTO {
         this.arrivalTime = arrivalTime;
         this.convertedPrice = convertedPrice;
         this.frequency = frequency;
+        this.company = company;
     }
 
 }
