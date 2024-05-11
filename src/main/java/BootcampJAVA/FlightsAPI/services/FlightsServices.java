@@ -31,9 +31,9 @@ public class FlightsServices {
         @Autowired
         CompanyRepository companyRepository;
 
-        // private List<Flight> flightsList = new ArrayList<>();
 
-        //CRUD
+                                        //CRUD
+
         public void createSeveralFlights(List<Flight> flights){
             flightsRepository.saveAll(flights);
         }
@@ -91,19 +91,7 @@ public class FlightsServices {
         }
 
 
-        //FUNCIONALIDADES EXTRA
-//        public List<FlightDTO> getFlightsByOrigin(String origin) { //Ver como hacer que devuelva mensaje de no hay lista o lista, se puede?
-//            List<FlightDTO> byOrigin = new ArrayList<>();
-//            long quantity = byOrigin.size(); //SIEMPRE DA CERO
-//            System.out.println(quantity);
-//            double dolarPrice = getDolar();
-//            if (quantity>0){
-//                System.out.println("Lista de vuelos");
-//            } else {
-//                System.out.println("No hay vuelos de origen " + origin);
-//            }
-//            return flightUtils.DTOsMapper(flightsRepository.findByOrigin(origin), dolarPrice);
-//        }
+                            //FUNCIONALIDADES EXTRA
 
         public List<FlightDTO> getFlightsByOrigin(String origin) {
             List<FlightDTO> byOrigin = new ArrayList<>();
@@ -177,3 +165,18 @@ public class FlightsServices {
         } //trae promedio, x metodo en clase Dolar
 }
 
+
+
+
+//        public List<FlightDTO> getFlightsByOrigin(String origin) { //Ver como hacer que devuelva mensaje o lista, se puede?
+//            List<FlightDTO> byOrigin = new ArrayList<>();
+//            long quantity = byOrigin.size(); //SIEMPRE DA CERO
+//            System.out.println(quantity);
+//            double dolarPrice = getDolar();
+//            if (quantity>0){
+//                System.out.println("Lista de vuelos");
+//            } else {
+//                System.out.println("No hay vuelos de origen " + origin);
+//            }
+//            return flightUtils.DTOsMapper(flightsRepository.findByOrigin(origin), dolarPrice);
+//        }

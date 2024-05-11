@@ -15,5 +15,4 @@ public interface FlightsRepository extends JpaRepository<Flight, Long> {
 }
 
 //Una vez que agrego la interfaz, puedo usar los metodos q extiende JPA Repo (para el CRUD)
-
 //https://spring.io/guides/gs/accessing-data-mysql al app.properties

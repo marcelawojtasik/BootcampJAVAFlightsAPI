@@ -39,10 +39,6 @@ public class FlightController {
         flightsServices.createSeveralFlightsWithCompany(flights, companyId);
     }
 
-//    @GetMapping("/all")
-//    public List<Flight> getAllFlights(){
-//        return flightsServices.getAllFlights();
-//    }
     @CrossOrigin
     @GetMapping("/all")
     public List<FlightDTO> getAllFlights(){
@@ -59,7 +55,7 @@ public class FlightController {
 //    public Flight findFlightById(@PathVariable Long id){
 //        return flightsServices.getFlightById(id);
 //    }
-    //    public String findFlightById(@PathVariable Long id){
+//    public String findFlightById(@PathVariable Long id){
 //        try{
 //            Flight flight = flightsServices.getFlightById(id);
 //            return ("El vuelo es " +flight);
@@ -88,7 +84,6 @@ public class FlightController {
     public void deleteAllFlights(){
         flightsServices.deleteAllFlights();
     }
-
 
     //                  ENDPOINTS FUNCIONALIDADES EXTRA
 
@@ -134,16 +129,5 @@ public class FlightController {
 
 }
 
-
-
-
-
-
-
-
-//    @GetMapping("/dolarPrice")
-//    public double getDolar(){
-//        return flightsServices.getDolar();
-//    }
 
 

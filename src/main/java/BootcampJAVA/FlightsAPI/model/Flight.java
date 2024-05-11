@@ -12,7 +12,7 @@ import lombok.*;
 @Entity
 public class Flight {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //para que se genere automaticamente distintos ids numericos
+    @GeneratedValue(strategy = GenerationType.AUTO) //
     private Long id;
     private String origin;
     private String destiny;
